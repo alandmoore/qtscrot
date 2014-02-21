@@ -49,6 +49,8 @@ class ScrotGUI(QMainWindow):
         self.formlayout.addWidget(self.gobutton)
                 
         #Type of shot
+        shot_type_gb = QGroupBox("Type of shot")
+        shot_type_gb.setLayout(QGridLayout())
         self.shot_type_button_group = QButtonGroup()
         self.shot_types = [
             settingItem("&Full", ["-m"]),
@@ -60,11 +62,12 @@ class ScrotGUI(QMainWindow):
         for i, shot_type in enumerate(self.shot_types):
             button = QRadioButton(shot_type.label)
             self.shot_type_button_group.addButton(button)
-            self.formlayout.addWidget(button)
+            shot_type_gb.layout().addWidget(button, i/2, i % 2)
             button.toggled[bool].connect(partial(self.set_shot_type, i, shot_type.args))
-            if i == 0:
+            if i == 0: # Set the first radio button selected
                 button.setChecked(True)
-
+        self.formlayout.addWidget(shot_type_gb)
+        
         # Countdown
         countdown_section = QWidget()
         countdown_section.setSizePolicy(QSizePolicy(QSizePolicy.Minimum))
